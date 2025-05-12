@@ -29,9 +29,22 @@
 		A2BFDA672DCC0D13005C6FBF /* GearBearUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GearBearUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A2FD66342DD26BD700E6EC55 /* Exceptions for "GearBear" folder in "GearBear" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A2BFDA4A2DCC0D10005C6FBF /* GearBear */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A2BFDA4D2DCC0D10005C6FBF /* GearBear */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A2FD66342DD26BD700E6EC55 /* Exceptions for "GearBear" folder in "GearBear" target */,
+			);
 			path = GearBear;
 			sourceTree = "<group>";
 		};
@@ -400,7 +413,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"GearBear/Preview Content\"";
 				DEVELOPMENT_TEAM = 7PLHXPBU8P;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = GearBear/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app requires access to the local network to fetch user data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -419,7 +434,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -435,7 +450,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"GearBear/Preview Content\"";
 				DEVELOPMENT_TEAM = 7PLHXPBU8P;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = GearBear/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app requires access to the local network to fetch user data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -453,7 +470,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

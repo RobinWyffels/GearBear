@@ -12,7 +12,11 @@ struct HomePageView: View {
     @StateObject private var viewModel = TodaysJobsViewModel()
 
     var body: some View {
-        VStack 
+        VStack {
+            Text("Welcome, \(user.name)!")
+                .font(.largeTitle)
+                .padding()
+
             if viewModel.isLoading {
                 ProgressView("Loading jobs...")
                     .padding()

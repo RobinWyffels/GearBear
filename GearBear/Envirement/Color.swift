@@ -15,4 +15,7 @@ extension Color {
     static let StatusReady = Color("StatusReady", bundle: .main)
     static let StatusNeedsScraping = Color("StatusNeedsScraping", bundle: .main)
     static let StatusSetupTuning = Color("StatusSetupTuning", bundle: .main)
+    static let MainAppColor = Color("MainAppColor", bundle: .main)
+    static let SecondaryAppColor = Color("SecondaryAppColor", bundle: .main)
+
 }

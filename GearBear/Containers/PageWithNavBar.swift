@@ -18,7 +18,7 @@ struct PageWithNavBar<Content: View>: View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 content
-                    .padding(.bottom, 80) // Space for navbar
+                    .padding(.bottom, 80)
             }
             BottomNavBar()
         }

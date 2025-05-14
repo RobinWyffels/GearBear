@@ -14,7 +14,6 @@ struct BottomNavBar: View {
 
     var body: some View {
         HStack {
-            // Left custom button (replace with your custom icon)
             Button(action: leftAction) {
                 Image(systemName: "skis")
                     .resizable()
@@ -23,7 +22,6 @@ struct BottomNavBar: View {
             }
             .frame(maxWidth: .infinity)
 
-            // QR code button (center)
             Button(action: qrAction) {
                 Image(systemName: "qrcode.viewfinder")
                     .resizable()
@@ -32,7 +30,6 @@ struct BottomNavBar: View {
             }
             .frame(maxWidth: .infinity)
 
-            // Calendar with plus button (right)
             Button(action: rightAction) {
                 Image(systemName: "calendar.badge.plus")
                     .resizable()

@@ -11,6 +11,10 @@ struct TopBannerView: View {
     let showBackArrow: Bool
     let onBack: (() -> Void)?
 
+    @Environment(\.dismiss) private var dismiss
+
+    var settingsAction: () -> Void = {}
+
     var body: some View {
         HStack {
             if showBackArrow {
@@ -40,15 +44,19 @@ struct TopBannerView: View {
                 .foregroundColor(Color.PrimaryText)
                 .padding(.horizontal)
 
-            Image(systemName: "person")
-                .resizable()
-                .frame(width: 28, height: 28)
-                .foregroundColor(Color.PrimaryText)
-            Image(systemName: "gear")
-                .resizable()
-                .frame(width: 28, height: 28)
-                .foregroundColor(Color.PrimaryText)
-                .padding(.leading, 4)
+            Button(action: {dismiss()} ) {
+                Image(systemName: "person")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(Color.PrimaryText)
+            }
+            Button(action: settingsAction) {
+                Image(systemName: "gear")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(Color.PrimaryText)
+                    .padding(.leading, 4)
+            }
         }
         .padding(.top, 45)
     }

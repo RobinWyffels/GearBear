@@ -1,3 +1,4 @@
+// filepath: /Users/robinwyffels/Desktop/GearBear/GearBear/App/GearBear.swift
 //
 //  GearBear.swift
 //  GearBear
@@ -8,10 +9,15 @@
 import SwiftUI
 
 @main
-struct GearBear: App{
+struct GearBear: App {
+    init() {
+        UINavigationBar.appearance().overrideUserInterfaceStyle = .light
+    }
     var body: some Scene {
-        WindowGroup{
+        WindowGroup {
             UserSelectView()
+                .preferredColorScheme(.light)
+                //.background(Color.AppBackground.edgesIgnoringSafeArea(.all))
         }
     }
 }

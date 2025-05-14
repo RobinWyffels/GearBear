@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 class UserSelectViewModel: ObservableObject, @unchecked Sendable {
+    static let shared = UserSelectViewModel()
+    
     @Published var users: [User] = []
     @Published var selectedUser: User? = nil
     

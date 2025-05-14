@@ -12,20 +12,41 @@ struct HomePageView: View {
     @StateObject private var viewModel = TodaysJobsViewModel()
 
     var body: some View {
+
         VStack {
-            Text("Welcome, \(user.name)!")
-                .font(.largeTitle)
-                .padding()
+            TopBannerView(showBackArrow: false, onBack: nil)
 
             if viewModel.isLoading {
+                Text("Today's Jobs")
+                    .font(.title)
+                    .bold()
+                    .padding(.top, 20)
+                    .foregroundColor(Color.PrimaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
                 ProgressView("Loading jobs...")
                     .padding()
             } else if viewModel.jobs.isEmpty {
-                Text("No jobs found.")
-                    .foregroundColor(.gray)
+                Text("Today's Jobs")
+                    .font(.title)
+                    .bold()
+                    .padding(.top, 20)
+                    .foregroundColor(Color.PrimaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                Text("Take a break, there are no jobs for today.")
+                    .foregroundColor(Color.PrimaryText)
                     .padding()
             } else {
                 ScrollView {
+                    Text("Today's Jobs")
+                    .font(.title)
+                    .bold()
+                    .padding(.top, 20)
+                    .foregroundColor(Color.PrimaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    
                     LazyVStack(spacing: 16) {
                         ForEach(viewModel.jobs) { job in
                             JobCardView(job: job)
@@ -34,7 +55,9 @@ struct HomePageView: View {
                     .padding()
                 }
             }
+            Spacer()
         }
+        .ignoresSafeArea(edges: .top)
         .onAppear {
             print("HomePageView loaded for user: \(user.name)")
             viewModel.loadJobs(for: user)
@@ -42,6 +65,6 @@ struct HomePageView: View {
     }
 }
 
-#Preview {
-    HomePageView(user: User(id: 1, name: "John Doe", avatar: "avatar_placeholder"))
-}
+//#Preview {
+//    HomePageView(user: User(id: 1, name: "John Doe", avatar: "avatar_placeholder"))
+//}

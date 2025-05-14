@@ -16,14 +16,14 @@ struct JobCardView: View {
                 Text("\(job.athlete.first?.name ?? "Unknown") - \(job.ski.type ?? "Unknown") \(job.ski.pairNr ?? 0)")
                     .font(.headline)
                     .bold()
-                    .foregroundColor(Color.primaryText)
+                    .foregroundColor(Color.PrimaryText)
                     .padding(.bottom, 10)
                 Spacer()
 
                 Text(job.JobDescription.joined(separator: ", "))
                 .font(.subheadline)
                 .lineLimit(1)
-                .foregroundColor(Color.primaryText)
+                .foregroundColor(Color.PrimaryText)
                 
             }
             Button(action: {}) {

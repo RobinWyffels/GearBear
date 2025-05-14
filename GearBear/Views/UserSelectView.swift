@@ -17,7 +17,7 @@ struct UserSelectView: View {
                 Text("Welcome")
                     .font(.largeTitle)
                     .bold()
-                    .foregroundColor(Color.primaryText)
+                    .foregroundColor(Color.PrimaryText)
                     .padding(.bottom, 120)
                 
                 if viewModel.users.isEmpty {
@@ -31,7 +31,7 @@ struct UserSelectView: View {
                         
                         Text("No Internet Connection")
                             .font(.headline)
-                            .foregroundColor(Color.primaryText)
+                            .foregroundColor(Color.PrimaryText)
                             .padding()
                     }
                 } else {
@@ -44,7 +44,7 @@ struct UserSelectView: View {
                                         .frame(width: 80, height: 80)
                                     Text(user.name)
                                         .font(.headline)
-                                        .foregroundColor(Color.primaryText)
+                                        .foregroundColor(Color.PrimaryText)
                                 }
                                 .padding()
                                 .background(Color.white)

@@ -13,15 +13,32 @@ struct Job: Identifiable, Decodable {
     let athlete: [Athlete]
     let ski: Ski
     let status: String
-    let jobDescription: [JobTask]
-    let user: [User]
+    let JobDescription: [String]
+    let user: [User]?
 
     enum CodingKeys: String, CodingKey {
         case id
         case date
-        case athlete = "Athlete" 
-        case ski = "Ski" 
-        case status = "Status" 
-        case jobDescription = "jobDiscription"
+        case athlete = "Athlete"
+        case ski = "Ski"
+        case status = "Status"
+        case jobDescription = "JobDiscription"
+        case user = "User"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            id = try container.decode(Int.self, forKey: .id)
+            date = try container.decodeIfPresent(String.self, forKey: .date)
+            athlete = try container.decode([Athlete].self, forKey: .athlete)
+            ski = try container.decode(Ski.self, forKey: .ski)
+            status = try container.decode(String.self, forKey: .status)
+            JobDescription = try container.decode([String].self, forKey: .jobDescription)
+            user = try container.decodeIfPresent([User].self, forKey: .user)
+        } catch {
+            print("Error decoding Job: \(error)")
+            throw error
+        }
     }
 }

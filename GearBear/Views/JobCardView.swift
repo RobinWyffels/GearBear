@@ -13,29 +13,25 @@ struct JobCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("\(job.athlete.first?.name ?? "Unknown") - \(job.ski.first?.type ?? "Unknown") \(job.ski.first?.pairNr ?? 0)")
+                Text("\(job.athlete.first?.name ?? "Unknown") - \(job.ski.type ?? "Unknown") \(job.ski.pairNr ?? 0)")
                     .font(.headline)
                     .bold()
                     .foregroundColor(Color.primaryText)
+                    .padding(.bottom, 10)
                 Spacer()
-                Text(job.status)
-                    .font(.subheadline)
-                    .foregroundColor(Color.primaryText)
-                    .padding(8)
-                    .background(statusColor(for: job.status))
-                    .cornerRadius(8)
-            }
 
-            Text(job.jobDescription.map { $0.description }.joined(separator: ", "))
+                Text(job.JobDescription.joined(separator: ", "))
                 .font(.subheadline)
                 .lineLimit(1)
-                .foregroundColor(.gray)
-
+                .foregroundColor(Color.primaryText)
+                
+            }
             Button(action: {}) {
                 Text(job.status)
-                    .font(.subheadline)
+                    .font(.headline)
+                    .bold()
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(2)
                     .frame(maxWidth: .infinity)
                     .background(statusColor(for: job.status))
                     .cornerRadius(8)
@@ -64,5 +60,3 @@ struct JobCardView: View {
         }
     }
 }
-
-

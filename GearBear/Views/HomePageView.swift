@@ -8,33 +8,32 @@
 import SwiftUI
 
 struct HomePageView: View {
-    let user: User // Accept the selected user as a parameter
+    let user: User
     @StateObject private var viewModel = TodaysJobsViewModel()
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                Text("Welcome, \(user.name)!")
-                    .font(.largeTitle)
+        VStack 
+            if viewModel.isLoading {
+                ProgressView("Loading jobs...")
                     .padding()
-
-                if viewModel.isLoading {
-                    ProgressView("Loading jobs...")
-                        .padding()
-                } else {
-                    ScrollView {
-                        LazyVStack(spacing: 16) {
-                            ForEach(viewModel.jobs) { job in
-                                JobCardView(job: job)
-                            }
+            } else if viewModel.jobs.isEmpty {
+                Text("No jobs found.")
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 16) {
+                        ForEach(viewModel.jobs) { job in
+                            JobCardView(job: job)
                         }
-                        .padding()
                     }
+                    .padding()
                 }
             }
-            .onAppear {
-                viewModel.loadJobs(for: user) // Load jobs for the selected user
-            }
+        }
+        .onAppear {
+            print("HomePageView loaded for user: \(user.name)")
+            viewModel.loadJobs(for: user)
         }
     }
 }

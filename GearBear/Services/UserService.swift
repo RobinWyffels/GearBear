@@ -9,7 +9,7 @@ import Foundation
 
 class UserService: @unchecked Sendable {
     static let shared = UserService()
-    private let apiUrl = "http://192.168.1.232:8000/users"
+    private let apiUrl = "http://192.168.1.170:8000/users"
 
     func fetchUsers(completion: @escaping @Sendable ([User]?) -> Void) {
         guard let url = URL(string: apiUrl) else {

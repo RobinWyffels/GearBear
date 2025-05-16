@@ -9,8 +9,22 @@ import SwiftUI
 
 struct JobCardView: View {
     let job: Job
+    var onTap: (() -> Void)? = nil
 
     var body: some View {
+        Group {
+            if let onTap = onTap {
+                Button(action: onTap) {
+                    cardContent
+                }
+                .buttonStyle(PlainButtonStyle())
+            } else {
+                cardContent
+            }
+        }
+    }
+
+    private var cardContent: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("\(job.athlete.first?.name ?? "Unknown") - \(job.ski.type ?? "Unknown") \(job.ski.pairNr ?? 0)")
@@ -19,23 +33,19 @@ struct JobCardView: View {
                     .foregroundColor(Color.PrimaryText)
                     .padding(.bottom, 10)
                 Spacer()
-
                 Text(job.JobDescription.joined(separator: ", "))
-                .font(.subheadline)
-                .lineLimit(1)
-                .foregroundColor(Color.PrimaryText)
-                
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .foregroundColor(Color.PrimaryText)
             }
-            Button(action: {}) {
-                Text(job.status)
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(.white)
-                    .padding(2)
-                    .frame(maxWidth: .infinity)
-                    .background(statusColor(for: job.status))
-                    .cornerRadius(8)
-            }
+            Text(job.status)
+                .font(.headline)
+                .bold()
+                .foregroundColor(.white)
+                .padding(2)
+                .frame(maxWidth: .infinity)
+                .background(statusColor(for: job.status))
+                .cornerRadius(8)
         }
         .padding()
         .background(Color.white)

@@ -18,7 +18,7 @@ struct Job: Identifiable, Decodable {
 
     enum CodingKeys: String, CodingKey {
         case id
-        case date
+        case date = "Date" 
         case athlete = "Athlete"
         case ski = "Ski"
         case status = "Status"

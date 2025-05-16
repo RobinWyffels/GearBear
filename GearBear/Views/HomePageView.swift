@@ -11,7 +11,8 @@ struct HomePageView: View {
     let user: User
     @StateObject private var viewModel = TodaysJobsViewModel()
     @StateObject private var futureJobsViewModel = FutureJobsViewModel()
-
+    @State private var selectedJobId: Int? = nil
+    @State private var showAllFutureJobs = false
 
     var body: some View {
         PageWithNavBar {
@@ -36,19 +37,21 @@ struct HomePageView: View {
                     } else {
                         LazyVStack(spacing: 16) {
                             ForEach(viewModel.jobs) { job in
-                                JobCardView(job: job)
+                                JobCardView(job: job) {
+                                    selectedJobId = job.id
+                                }
                             }
                         }
                         .padding(.horizontal)
                     }
                     // Future Jobs Section
                     Text("Future Jobs")
-                            .font(.title)
-                            .bold()
-                            .padding(.top, 20)
-                            .foregroundColor(Color.PrimaryText)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
+                        .font(.title)
+                        .bold()
+                        .padding(.top, 20)
+                        .foregroundColor(Color.PrimaryText)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
                     if futureJobsViewModel.isLoading {
                         ProgressView("Loading future jobs...")
                             .padding()
@@ -56,20 +59,22 @@ struct HomePageView: View {
                         Text("No future jobs for now!")
                             .foregroundColor(Color.PrimaryText)
                             .padding()
-                    } else if !futureJobsViewModel.jobs.isEmpty {
-                        LazyVStack {
-                            ForEach(futureJobsViewModel.jobs) { job in
-                                FutureJobCard(job: job)
+                    } else {
+                        Button(action: { showAllFutureJobs = true }) {
+                            LazyVStack {
+                                ForEach(futureJobsViewModel.jobs) { job in
+                                    FutureJobCard(job: job)
+                                }
                             }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                            .padding(.horizontal)
                         }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-                        .padding(.horizontal)
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
-                
                 Spacer()
             }
             .ignoresSafeArea(edges: .top)
@@ -78,10 +83,12 @@ struct HomePageView: View {
                 viewModel.loadJobs(for: user)
                 futureJobsViewModel.loadJobs(for: user)
             }
+            .navigationDestination(item: $selectedJobId) { jobId in
+                JobDetailView(jobId: jobId)
+            }
+            .navigationDestination(isPresented: $showAllFutureJobs) {
+                AllFutureJobsView(user: user)
+            }
         }
     }
 }
-
-//#Preview {
-//    HomePageView(user: User(id: 1, name: "John Doe", avatar: "avatar_placeholder"))
-//}

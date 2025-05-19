@@ -11,6 +11,8 @@ struct JobDetailView: View {
     let jobId: Int
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = JobDetailViewModel()
+    @State private var showStatusSheet = false
+    @State private var selectedStatus: String = ""
 
     var body: some View {
         PageWithNavBar {
@@ -94,20 +96,39 @@ struct JobDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
                             
-                            Text(job.status)
-                                .font(.headline)
-                                .bold()
-                                .foregroundColor(.white)
-                                .padding(2)
-                                .frame(maxWidth: .infinity)
-                                .background(statusColor(for: job.status))
-                                .cornerRadius(8)
+                            Button(action: {
+                                selectedStatus = job.status
+                                showStatusSheet = true
+                            }) {
+                                Text(job.status)
+                                    .font(.headline)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .padding(2)
+                                    .frame(maxWidth: .infinity)
+                                    .background(statusColor(for: job.status))
+                                    .cornerRadius(8)
+                            }
                         }
                         .padding()
                         .background(Color.white)
                         .cornerRadius(12)
                         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                         .padding(.horizontal)
+                        .sheet(isPresented: $showStatusSheet) {
+                            StatusPickerSheet(
+                                currentStatus: selectedStatus,
+                                onSelect: { newStatus in
+                                    viewModel.updateJobStatus(newStatus)
+                                    showStatusSheet = false
+                                }
+                            )
+                        }
+                        .onChange(of: showStatusSheet) {
+                            if showStatusSheet, let job = viewModel.job {
+                                selectedStatus = job.status
+                            }
+                        }
 
                         VStack{
                             Text("Ski Notes")

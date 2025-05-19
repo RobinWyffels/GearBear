@@ -12,7 +12,7 @@ struct Job: Identifiable, Decodable {
     let date: String?
     let athlete: [Athlete]
     let ski: Ski
-    let status: String
+    var status: String
     let JobDescription: [String]
     let user: [User]?
 

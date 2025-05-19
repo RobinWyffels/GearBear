@@ -64,6 +64,32 @@ class JobDetailService: @unchecked Sendable {
                 return
             }
             completion(true)
-    }.resume()
-}
+        }.resume()
+    }
+    
+    func updateJobStatus(jobId: Int, status: String, completion: @escaping @Sendable (Bool) -> Void) {
+        let apiUrl = "\(baseUrl)/\(jobId)/status"
+        guard let url = URL(string: apiUrl) else {
+            completion(false)
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body = ["Status": status]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted),
+        let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("PUT body for status update:\n\(jsonString)")
+        }
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error updating status: \(error)")
+                completion(false)
+                return
+            }
+            completion(true)
+        }.resume()
+    }
+
 }

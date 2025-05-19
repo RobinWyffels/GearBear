@@ -17,21 +17,22 @@ class JobDetailViewModel: ObservableObject, @unchecked Sendable {
    func loadJob(jobId: Int) {
         isLoading = true
         JobDetailService.shared.fetchJob(jobId: jobId) { [weak self] job in
-            guard let self = self else { return }
-            self.job = job
-            
-            if let job = job {
-                self.jobTasks = job.JobDescription.map { desc in
-                    
-                    let parts = desc.split(separator: "|", omittingEmptySubsequences: false)
-                    let description = parts.first.map(String.init) ?? ""
-                    let status = parts.count > 1 ? Int(parts[1]) ?? 0 : 0
-                    return JobTask(description: description, status: status)
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.job = job
+                
+                if let job = job {
+                    self.jobTasks = job.JobDescription.map { desc in
+                        let parts = desc.split(separator: "|", omittingEmptySubsequences: false)
+                        let description = parts.first.map(String.init) ?? ""
+                        let status = parts.count > 1 ? Int(parts[1]) ?? 0 : 0
+                        return JobTask(description: description, status: status)
+                    }
+                } else {
+                    self.jobTasks = []
                 }
-            } else {
-                self.jobTasks = []
+                self.isLoading = false
             }
-            self.isLoading = false
         }
     }
 
@@ -49,6 +50,19 @@ class JobDetailViewModel: ObservableObject, @unchecked Sendable {
             
         }
     }
+
+    func updateJobStatus(_ newStatus: String) {
+    guard let jobId = job?.id else { return }
+    JobDetailService.shared.updateJobStatus(jobId: jobId, status: newStatus) { [weak self] success in
+        DispatchQueue.main.async {
+            if success {
+                self?.job?.status = newStatus
+            }
+        }
+    }
+}
+
+    
 
     
 }

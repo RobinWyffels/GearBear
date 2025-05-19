@@ -8,8 +8,13 @@
 import Foundation
 
 struct JobTask: Decodable {
-    let description: String
-    let status: Int
+    var description: String
+    var status: Int
+
+    init(description: String, status: Int) {
+        self.description = description
+        self.status = status
+    }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

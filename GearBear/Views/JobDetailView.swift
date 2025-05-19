@@ -12,6 +12,7 @@ struct JobDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = JobDetailViewModel()
     @State private var showStatusSheet = false
+    @State private var showEditTasksSheet = false
     @State private var selectedStatus: String = ""
 
     var body: some View {
@@ -56,14 +57,26 @@ struct JobDetailView: View {
 
                                 Spacer()
                                 Button(action: {
-                                    // Action for edit button
-                                    //TODO add Sheet EditJobDescription
+                                    showEditTasksSheet = true
                                 }) {
                                     Image(systemName: "square.and.pencil")
                                     .foregroundColor(Color.PrimaryText)
                                 }
                             }
                             .padding(.bottom, 8)
+                            .sheet(isPresented: $showEditTasksSheet) {
+                                EditJobTasksSheet(
+                                    jobTasks: viewModel.jobTasks,
+                                    onSave: { updatedTasks in
+                                        viewModel.jobTasks = updatedTasks
+                                        viewModel.uploadTasks()
+                                        showEditTasksSheet = false
+                                    },
+                                    onCancel: {
+                                        showEditTasksSheet = false
+                                    }
+                                )
+                            }
 
                             VStack(alignment: .leading, spacing: 8) {
                                 ForEach(viewModel.jobTasks.indices, id: \.self) { idx in

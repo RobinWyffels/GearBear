@@ -74,11 +74,31 @@ class ScheduleJobViewModel: ObservableObject, @unchecked Sendable  {
         }
     }
 
-    func scheduleJob(completion: @escaping @Sendable () -> Void) {
+  
+    func scheduleJob(
+        status: String,
+        jobDescription: [String],
+        userId: Int,
+        completion: @escaping @Sendable () -> Void
+    ) {
         guard let athlete = selectedAthlete,
-              let type = selectedType,
-              let pairNr = selectedPairNr else { return }
-        let request = NewJobRequest(date: date, athleteId: athlete.id, skiType: type, pairNr: pairNr)
+            let type = selectedType,
+            let pairNr = selectedPairNr,
+            let ski = skis.first(where: { $0.athleteId == athlete.id && $0.type == type && $0.pairNr == pairNr })
+        else { return }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: date)
+
+        let request = NewJobRequest(
+            date: dateString,
+            athleteId: athlete.id,
+            skiId: ski.id,
+            status: status,
+            jobDescription: jobDescription,
+            userId: userId
+        )
         ScheduleJobService.shared.scheduleJob(request: request) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -90,4 +110,5 @@ class ScheduleJobViewModel: ObservableObject, @unchecked Sendable  {
             }
         }
     }
+
 }

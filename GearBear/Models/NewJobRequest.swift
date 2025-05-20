@@ -8,8 +8,10 @@
 import Foundation
 
 struct NewJobRequest: Codable {
-    let date: Date
+    let date: String
     let athleteId: Int
-    let skiType: String
-    let pairNr: Int
+    let skiId: Int
+    let status: String
+    let jobDescription: [String]
+    let userId: Int
 }

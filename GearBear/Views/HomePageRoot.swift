@@ -37,7 +37,9 @@ struct HomePageRoot: View {
                 }
             }
             .navigationDestination(isPresented: $showScheduleJob) {
-                ScheduleJobView()
+                if let user = selectedUser {
+                    ScheduleJobView(user: user)
+                }
             }
             .navigationDestination(item: $selectedJobId) { jobId in
                 JobDetailView(jobId: jobId, showScheduleJob: $showScheduleJob)

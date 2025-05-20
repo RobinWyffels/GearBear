@@ -13,9 +13,12 @@ struct HomePageView: View {
     @StateObject private var futureJobsViewModel = FutureJobsViewModel()
     @State private var selectedJobId: Int? = nil
     @State private var showAllFutureJobs = false
+    @State private var showScheduleJob = false
 
     var body: some View {
-        PageWithNavBar {
+        PageWithNavBar(rightAction: {
+            showScheduleJob = true
+        }) {
             VStack {
                 TopBannerView(showBackArrow: false, onBack: nil)
                 ScrollView {
@@ -88,6 +91,9 @@ struct HomePageView: View {
             }
             .navigationDestination(isPresented: $showAllFutureJobs) {
                 AllFutureJobsView(user: user)
+            }
+            .navigationDestination(isPresented: $showScheduleJob) {
+                ScheduleJobView()
             }
         }
     }

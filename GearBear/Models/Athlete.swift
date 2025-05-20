@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Athlete: Identifiable, Decodable {
+struct Athlete: Identifiable, Decodable, Hashable {
     let id: Int
     let name: String
 }

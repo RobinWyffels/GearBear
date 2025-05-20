@@ -85,6 +85,7 @@ struct HomePageRoot: View {
                         let viewModel = FocussedSkiViewModel(response: skiData)
                         FocussedSkiView(
                             viewModel: viewModel,
+                            
                             onScheduleJob: {
                                 schedulePrefillAthlete = skiData.athlete
                                 schedulePrefillSki = skiData.ski
@@ -92,7 +93,8 @@ struct HomePageRoot: View {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                     showScheduleJob = true
                                 }
-                            }
+                            },
+                            qrAction: { showQRScanner = true }
                         )
                     }
                 }

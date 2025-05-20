@@ -91,5 +91,23 @@ class JobDetailService: @unchecked Sendable {
             completion(true)
         }.resume()
     }
+    func deleteJob(jobId: Int, completion: @escaping @Sendable (Bool) -> Void) {
+        let apiUrl = "\(baseUrl)/\(jobId)"
+        guard let url = URL(string: apiUrl) else {
+            completion(false)
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            if let error = error {
+                print("Error deleting job: \(error)")
+                completion(false)
+                return
+            }
+            // Optionally check response code here
+            completion(true)
+        }.resume()
+    }
 
 }

@@ -52,17 +52,23 @@ class JobDetailViewModel: ObservableObject, @unchecked Sendable {
     }
 
     func updateJobStatus(_ newStatus: String) {
-    guard let jobId = job?.id else { return }
-    JobDetailService.shared.updateJobStatus(jobId: jobId, status: newStatus) { [weak self] success in
-        DispatchQueue.main.async {
-            if success {
-                self?.job?.status = newStatus
+        guard let jobId = job?.id else { return }
+        JobDetailService.shared.updateJobStatus(jobId: jobId, status: newStatus) { [weak self] success in
+            DispatchQueue.main.async {
+                if success {
+                    self?.job?.status = newStatus
+                }
             }
         }
     }
-}
 
-    
+    func deleteJob(completion: @Sendable @escaping (Bool) -> Void) {
+        guard let jobId = job?.id else { return }
+        JobDetailService.shared.deleteJob(jobId: jobId) { success in
+            DispatchQueue.main.async {
+                completion(success)
+            }
+        }
+    }
 
-    
 }

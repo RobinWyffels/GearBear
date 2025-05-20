@@ -15,6 +15,8 @@ struct JobDetailView: View {
     @State private var showStatusSheet = false
     @State private var showEditTasksSheet = false
     @State private var selectedStatus: String = ""
+    @State private var showDeleteAlert = false
+
 
     var qrAction: () -> Void = {}
     var personAction: () -> Void = {}
@@ -220,8 +222,39 @@ struct JobDetailView: View {
                         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                         .padding(.horizontal)
 
+
+                        Button(role: .destructive) {
+                            showDeleteAlert = true
+                        } label: {
+                            Text("Delete Job")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
+                        .padding(.top, 24)
+                        .padding(.horizontal)
+                        
+                        Spacer()
                     }
-                    
+                    .alert(isPresented: $showDeleteAlert) {
+                        Alert(
+                            title: Text("Delete Job"),
+                            message: Text("Are you sure you want to delete this job? This action cannot be undone."),
+                            primaryButton: .destructive(Text("Delete")) {
+                                viewModel.deleteJob { success in
+                                    if success {
+                                        DispatchQueue.main.async {
+                                            dismiss()
+                                        }
+                                    }
+                                }
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
+
                     Spacer()
                     
                 } else {

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobDetailView: View {
     let jobId: Int
+    @Binding var showScheduleJob: Bool
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = JobDetailViewModel()
     @State private var showStatusSheet = false
@@ -16,7 +17,9 @@ struct JobDetailView: View {
     @State private var selectedStatus: String = ""
 
     var body: some View {
-        PageWithNavBar {
+        PageWithNavBar(rightAction: {
+            showScheduleJob = true
+        }) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })
 

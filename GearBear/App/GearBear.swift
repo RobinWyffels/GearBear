@@ -10,12 +10,14 @@ import SwiftUI
 
 @main
 struct GearBear: App {
+    @State private var selectedUser: User? = nil
+
     init() {
         UINavigationBar.appearance().overrideUserInterfaceStyle = .light
     }
     var body: some Scene {
         WindowGroup {
-            UserSelectView()
+            HomePageRoot(selectedUser: $selectedUser)
                 .preferredColorScheme(.light)
                 //.background(Color.AppBackground.edgesIgnoringSafeArea(.all))
         }

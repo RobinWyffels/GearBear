@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AllFutureJobsView: View {
     let user: User
+    @Binding var showScheduleJob: Bool
+
     @Environment(\.dismiss) private var dismiss
     @StateObject private var todaysJobsViewModel = TodaysJobsViewModel()
     @StateObject private var allFutureJobsViewModel = AllFutureJobsViewModel()
@@ -24,7 +26,9 @@ struct AllFutureJobsView: View {
     }
 
     var body: some View {
-        PageWithNavBar {
+        PageWithNavBar(rightAction: {
+            showScheduleJob = true
+        }) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })
                 ScrollView {
@@ -99,7 +103,7 @@ struct AllFutureJobsView: View {
                 allFutureJobsViewModel.loadJobs(for: user)
             }
             .navigationDestination(item: $selectedJobId) { jobId in
-                JobDetailView(jobId: jobId)
+                JobDetailView(jobId: jobId, showScheduleJob: $showScheduleJob)
             }
         }
     }

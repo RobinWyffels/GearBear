@@ -5,6 +5,13 @@
 //  Created by Robin Wyffels on 19/05/2025.
 //
 
+//
+//  ScheduleJobView.swift
+//  GearBear
+//
+//  Created by Robin Wyffels on 19/05/2025.
+//
+
 import SwiftUI
 
 struct ScheduleJobView: View {
@@ -12,8 +19,17 @@ struct ScheduleJobView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationView {
+        PageWithNavBar {
+            
             VStack(spacing: 24) {
+                TopBannerView(showBackArrow: true, onBack: { dismiss() })
+                
+                Text("Schedule Job")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top, 24)
+                    .foregroundColor(Color.PrimaryText)
+
                 DatePicker("Date", selection: $viewModel.date, displayedComponents: .date)
                     .datePickerStyle(.compact)
                     .padding(.horizontal)
@@ -62,7 +78,8 @@ struct ScheduleJobView: View {
 
                 Spacer()
             }
-            .navigationTitle("Schedule Job")
+            .ignoresSafeArea(edges: .top)
+
             .onAppear {
                 viewModel.loadAthletes()
             }

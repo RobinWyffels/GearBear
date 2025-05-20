@@ -9,11 +9,13 @@ import SwiftUI
 
 struct HomePageView: View {
     let user: User
+    @Binding var showScheduleJob: Bool
+    @Binding var selectedJobId: Int?
+    @Binding var showAllFutureJobs: Bool
+    var onLogout: () -> Void
+
     @StateObject private var viewModel = TodaysJobsViewModel()
     @StateObject private var futureJobsViewModel = FutureJobsViewModel()
-    @State private var selectedJobId: Int? = nil
-    @State private var showAllFutureJobs = false
-    @State private var showScheduleJob = false
 
     var body: some View {
         PageWithNavBar(rightAction: {
@@ -85,15 +87,6 @@ struct HomePageView: View {
                 print("HomePageView loaded for user: \(user.name)")
                 viewModel.loadJobs(for: user)
                 futureJobsViewModel.loadJobs(for: user)
-            }
-            .navigationDestination(item: $selectedJobId) { jobId in
-                JobDetailView(jobId: jobId)
-            }
-            .navigationDestination(isPresented: $showAllFutureJobs) {
-                AllFutureJobsView(user: user)
-            }
-            .navigationDestination(isPresented: $showScheduleJob) {
-                ScheduleJobView()
             }
         }
     }

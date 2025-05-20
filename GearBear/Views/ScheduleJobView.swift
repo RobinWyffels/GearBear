@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ScheduleJobView: View {
     let user: User
+    @Binding var prefillAthlete: Athlete?
+    @Binding var prefillSki: Ski?
     @StateObject private var viewModel = ScheduleJobViewModel()
     @Environment(\.dismiss) private var dismiss
 
@@ -59,8 +61,18 @@ struct ScheduleJobView: View {
                 .ignoresSafeArea(edges: .top)
                 .onAppear {
                     viewModel.loadAthletes()
+                    if let athlete = prefillAthlete {
+                        viewModel.selectedAthlete = athlete
+                    }
+                    if let ski = prefillSki {
+                        viewModel.selectedType = ski.type
+                        viewModel.selectedPairNr = ski.pairNr
+                    }
+                    prefillAthlete = nil
+                    prefillSki = nil
                 }
             }
+            .ignoresSafeArea(edges: .top)
         }
     }
 

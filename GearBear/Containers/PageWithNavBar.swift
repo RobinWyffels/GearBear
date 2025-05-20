@@ -10,10 +10,13 @@ import SwiftUI
 struct PageWithNavBar<Content: View>: View {
     let content: Content
     var rightAction: () -> Void = {}
+    var qrAction: () -> Void = {}
 
-    init(rightAction: @escaping () -> Void = {}, @ViewBuilder content: () -> Content) {
+
+    init(rightAction: @escaping () -> Void = {}, qrAction: @escaping () -> Void = {}, @ViewBuilder content: () -> Content) {
         self.content = content()
         self.rightAction = rightAction
+        self.qrAction = qrAction
     }
 
     init(@ViewBuilder content: () -> Content) {
@@ -26,7 +29,7 @@ struct PageWithNavBar<Content: View>: View {
                 content
                     .padding(.bottom, 80)
             }
-            BottomNavBar(rightAction: rightAction)
+            BottomNavBar(qrAction: qrAction, rightAction: rightAction)
         }
         .ignoresSafeArea(edges: .bottom)
     }

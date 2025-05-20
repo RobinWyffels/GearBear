@@ -41,4 +41,22 @@ struct Job: Identifiable, Decodable {
             throw error
         }
     }
+
+    init(
+        id: Int,
+        date: String?,
+        athlete: [Athlete],
+        ski: Ski,
+        status: String,
+        JobDescription: [String],
+        user: [User]? = nil
+    ) {
+        self.id = id
+        self.date = date
+        self.athlete = athlete
+        self.ski = ski
+        self.status = status
+        self.JobDescription = JobDescription
+        self.user = user
+    }
 }

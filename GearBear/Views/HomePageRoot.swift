@@ -12,6 +12,14 @@ struct HomePageRoot: View {
     @State private var showScheduleJob = false
     @State private var selectedJobId: Int? = nil
     @State private var showAllFutureJobs = false
+    @State private var showQRScanner = false 
+    @State private var focussedSki: FocussedSkiResponse? = nil
+    @State private var showFocussedSki = false
+    @State private var schedulePrefillAthlete: Athlete? = nil
+    @State private var schedulePrefillSki: Ski? = nil
+    @State private var showQRAlert = false
+    @State private var qrAlertMessage = ""
+
 
     var body: some View {
         NavigationStack {
@@ -22,7 +30,9 @@ struct HomePageRoot: View {
                         showScheduleJob: $showScheduleJob,
                         selectedJobId: $selectedJobId,
                         showAllFutureJobs: $showAllFutureJobs,
-                        onLogout: { selectedUser = nil }
+                        onLogout: { selectedUser = nil },
+                        qrAction: { showQRScanner = true }
+
                     )
                 } else {
                     Color.clear
@@ -36,17 +46,63 @@ struct HomePageRoot: View {
                     selectedUser = user
                 }
             }
-            .navigationDestination(isPresented: $showScheduleJob) {
-                if let user = selectedUser {
-                    ScheduleJobView(user: user)
-                }
-            }
             .navigationDestination(item: $selectedJobId) { jobId in
                 JobDetailView(jobId: jobId, showScheduleJob: $showScheduleJob)
             }
             .navigationDestination(isPresented: $showAllFutureJobs) {
                 if let user = selectedUser {
                     AllFutureJobsView(user: user, showScheduleJob: $showScheduleJob)
+                    
+                }
+            }
+            .navigationDestination(isPresented: $showScheduleJob) {
+                if let user = selectedUser {
+                    ScheduleJobView(
+                        user: user,
+                        prefillAthlete: $schedulePrefillAthlete,
+                        prefillSki: $schedulePrefillSki
+                    )
+                }
+            }
+            .sheet(isPresented: $showQRScanner) {
+                QRScannerView { scannedCode in
+                    showQRScanner = false
+                    SkiService.shared.fetchSkiByQRCode(qrCode: scannedCode) { response in
+                        DispatchQueue.main.async {
+                            if let response = response {
+                                focussedSki = response
+                                showFocussedSki = true
+                            } else {
+                                qrAlertMessage = "QR code not recognised. Try again."
+                                showQRAlert = true
+                            }
+                        }
+                    }
+                }
+            }
+            .alert(isPresented: $showQRAlert) {
+                Alert(
+                    title: Text("QR Scan Failed"),
+                    message: Text(qrAlertMessage),
+                    dismissButton: .default(Text("OK")) {
+                        showQRScanner = true // Reopen scanner if desired
+                    }
+                )
+            }
+            .navigationDestination(isPresented: $showFocussedSki) {
+                if let skiData = focussedSki {
+                    let viewModel = FocussedSkiViewModel(response: skiData)
+                    FocussedSkiView(
+                        viewModel: viewModel,
+                        onScheduleJob: {
+                            schedulePrefillAthlete = skiData.athlete
+                            schedulePrefillSki = skiData.ski
+                            showFocussedSki = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                showScheduleJob = true
+                            }
+                        }
+                    )
                 }
             }
         }

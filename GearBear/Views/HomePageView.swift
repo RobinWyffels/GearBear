@@ -13,14 +13,16 @@ struct HomePageView: View {
     @Binding var selectedJobId: Int?
     @Binding var showAllFutureJobs: Bool
     var onLogout: () -> Void
+    var qrAction: () -> Void = {}
 
     @StateObject private var viewModel = TodaysJobsViewModel()
     @StateObject private var futureJobsViewModel = FutureJobsViewModel()
 
     var body: some View {
-        PageWithNavBar(rightAction: {
-            showScheduleJob = true
-        }) {
+        PageWithNavBar(
+            rightAction: { showScheduleJob = true },
+            qrAction: qrAction 
+        ) {
             VStack {
                 TopBannerView(showBackArrow: false, onBack: nil)
                 ScrollView {

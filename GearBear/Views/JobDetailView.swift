@@ -17,6 +17,7 @@ struct JobDetailView: View {
     @State private var selectedStatus: String = ""
 
     var qrAction: () -> Void = {}
+    var personAction: () -> Void = {}
 
     var body: some View {
         PageWithNavBar(
@@ -24,7 +25,7 @@ struct JobDetailView: View {
             qrAction: qrAction 
         ) {
             VStack {
-                TopBannerView(showBackArrow: true, onBack: { dismiss() })
+                TopBannerView(showBackArrow: true, onBack: { dismiss() }, personAction: personAction)
 
                 if viewModel.isLoading {
                     ProgressView("Loading job details...")

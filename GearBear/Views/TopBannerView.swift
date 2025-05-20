@@ -10,6 +10,7 @@ import SwiftUI
 struct TopBannerView: View {
     let showBackArrow: Bool
     let onBack: (() -> Void)?
+    var personAction: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
 
@@ -44,7 +45,7 @@ struct TopBannerView: View {
                 .foregroundColor(Color.PrimaryText)
                 .padding(.horizontal)
 
-            Button(action: {dismiss()} ) {
+            Button(action: personAction) {
                 Image(systemName: "person")
                     .resizable()
                     .frame(width: 28, height: 28)

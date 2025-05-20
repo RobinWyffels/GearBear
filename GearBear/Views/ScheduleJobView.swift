@@ -21,13 +21,14 @@ struct ScheduleJobView: View {
     @State private var selectedStatus: String = "NEEDS PREPPING"
 
     var qrAction: () -> Void = {}
+    var personAction: () -> Void = {}
 
     var body: some View {
         PageWithNavBar(
             qrAction: qrAction 
         ) {
             VStack {
-                TopBannerView(showBackArrow: true, onBack: { dismiss() })
+                TopBannerView(showBackArrow: true, onBack: { dismiss() }, personAction: personAction)
                 ScrollView {
                     Text("Schedule Job")
                         .font(.title)

@@ -12,6 +12,7 @@ struct FocussedSkiView: View {
     @Environment(\.dismiss) private var dismiss
     var onScheduleJob: () -> Void
     var qrAction: () -> Void = {}
+    var personAction: () -> Void = {}
 
     @State private var selectedJobId: Int? = nil
 
@@ -21,7 +22,7 @@ struct FocussedSkiView: View {
             qrAction: qrAction 
         ) {
             VStack {
-                TopBannerView(showBackArrow: true, onBack: { dismiss() })
+                TopBannerView(showBackArrow: true, onBack: { dismiss() }, personAction: personAction)
 
                 ScrollView {
                     HStack {

@@ -12,7 +12,7 @@ struct HomePageView: View {
     @Binding var showScheduleJob: Bool
     @Binding var selectedJobId: Int?
     @Binding var showAllFutureJobs: Bool
-    var onLogout: () -> Void
+    var personAction: () -> Void = {}
     var qrAction: () -> Void = {}
 
     @StateObject private var viewModel = TodaysJobsViewModel()
@@ -24,7 +24,7 @@ struct HomePageView: View {
             qrAction: qrAction 
         ) {
             VStack {
-                TopBannerView(showBackArrow: false, onBack: nil)
+                TopBannerView(showBackArrow: false, onBack: nil, personAction: personAction )
                 ScrollView {
                     // Today's Jobs Section
                     Text("Today's Jobs")

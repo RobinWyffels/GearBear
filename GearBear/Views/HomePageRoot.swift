@@ -30,7 +30,7 @@ struct HomePageRoot: View {
                             showScheduleJob: $showScheduleJob,
                             selectedJobId: $selectedJobId,
                             showAllFutureJobs: $showAllFutureJobs,
-                            onLogout: { selectedUser = nil },
+                            personAction: { selectedUser = nil },
                             qrAction: { showQRScanner = true }
                         )
                     } else {

@@ -11,13 +11,14 @@ struct FocussedSkiView: View {
     @ObservedObject var viewModel: FocussedSkiViewModel
     @Environment(\.dismiss) private var dismiss
     var onScheduleJob: () -> Void
+    var qrAction: () -> Void = {}
 
     @State private var selectedJobId: Int? = nil
 
 
     var body: some View {
         PageWithNavBar(
-            rightAction: { onScheduleJob() }
+            qrAction: qrAction 
         ) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })

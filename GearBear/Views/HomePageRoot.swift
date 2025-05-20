@@ -20,89 +20,97 @@ struct HomePageRoot: View {
     @State private var showQRAlert = false
     @State private var qrAlertMessage = ""
 
-
     var body: some View {
-        NavigationStack {
-            Group {
-                if let user = selectedUser {
-                    HomePageView(
-                        user: user,
+        ZStack {
+            NavigationStack {
+                Group {
+                    if let user = selectedUser {
+                        HomePageView(
+                            user: user,
+                            showScheduleJob: $showScheduleJob,
+                            selectedJobId: $selectedJobId,
+                            showAllFutureJobs: $showAllFutureJobs,
+                            onLogout: { selectedUser = nil },
+                            qrAction: { showQRScanner = true }
+                        )
+                    } else {
+                        Color.clear
+                    }
+                }
+                .fullScreenCover(isPresented: Binding(
+                    get: { selectedUser == nil },
+                    set: { _ in }
+                )) {
+                    UserSelectView { user in
+                        selectedUser = user
+                    }
+                }
+                .navigationDestination(item: $selectedJobId) { jobId in
+                    JobDetailView(
+                        jobId: jobId,
                         showScheduleJob: $showScheduleJob,
-                        selectedJobId: $selectedJobId,
-                        showAllFutureJobs: $showAllFutureJobs,
-                        onLogout: { selectedUser = nil },
                         qrAction: { showQRScanner = true }
-
-                    )
-                } else {
-                    Color.clear
-                }
-            }
-            .fullScreenCover(isPresented: Binding(
-                get: { selectedUser == nil },
-                set: { _ in }
-            )) {
-                UserSelectView { user in
-                    selectedUser = user
-                }
-            }
-            .navigationDestination(item: $selectedJobId) { jobId in
-                JobDetailView(jobId: jobId, showScheduleJob: $showScheduleJob)
-            }
-            .navigationDestination(isPresented: $showAllFutureJobs) {
-                if let user = selectedUser {
-                    AllFutureJobsView(user: user, showScheduleJob: $showScheduleJob)
-                    
-                }
-            }
-            .navigationDestination(isPresented: $showScheduleJob) {
-                if let user = selectedUser {
-                    ScheduleJobView(
-                        user: user,
-                        prefillAthlete: $schedulePrefillAthlete,
-                        prefillSki: $schedulePrefillSki
                     )
                 }
-            }
-            .sheet(isPresented: $showQRScanner) {
-                QRScannerView { scannedCode in
-                    showQRScanner = false
-                    SkiService.shared.fetchSkiByQRCode(qrCode: scannedCode) { response in
-                        DispatchQueue.main.async {
-                            if let response = response {
-                                focussedSki = response
-                                showFocussedSki = true
-                            } else {
-                                qrAlertMessage = "QR code not recognised. Try again."
-                                showQRAlert = true
-                            }
+                .navigationDestination(isPresented: $showAllFutureJobs) {
+                    if let user = selectedUser {
+                        AllFutureJobsView(
+                            user: user,
+                            showScheduleJob: $showScheduleJob,
+                            qrAction: { showQRScanner = true }
+                        )
+                    }
+                }
+                .navigationDestination(isPresented: $showScheduleJob) {
+                    if let user = selectedUser {
+                        ScheduleJobView(
+                            user: user,
+                            prefillAthlete: $schedulePrefillAthlete,
+                            prefillSki: $schedulePrefillSki,
+                            qrAction: { showQRScanner = true }
+                        )
+                    }
+                }
+                .alert(isPresented: $showQRAlert) {
+                    Alert(
+                        title: Text("QR Scan Failed"),
+                        message: Text(qrAlertMessage),
+                        dismissButton: .default(Text("OK")) {
+                            showQRScanner = true // Reopen scanner if desired
                         }
+                    )
+                }
+                .navigationDestination(isPresented: $showFocussedSki) {
+                    if let skiData = focussedSki {
+                        let viewModel = FocussedSkiViewModel(response: skiData)
+                        FocussedSkiView(
+                            viewModel: viewModel,
+                            onScheduleJob: {
+                                schedulePrefillAthlete = skiData.athlete
+                                schedulePrefillSki = skiData.ski
+                                showFocussedSki = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    showScheduleJob = true
+                                }
+                            }
+                        )
                     }
                 }
             }
-            .alert(isPresented: $showQRAlert) {
-                Alert(
-                    title: Text("QR Scan Failed"),
-                    message: Text(qrAlertMessage),
-                    dismissButton: .default(Text("OK")) {
-                        showQRScanner = true // Reopen scanner if desired
-                    }
-                )
-            }
-            .navigationDestination(isPresented: $showFocussedSki) {
-                if let skiData = focussedSki {
-                    let viewModel = FocussedSkiViewModel(response: skiData)
-                    FocussedSkiView(
-                        viewModel: viewModel,
-                        onScheduleJob: {
-                            schedulePrefillAthlete = skiData.athlete
-                            schedulePrefillSki = skiData.ski
-                            showFocussedSki = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                showScheduleJob = true
-                            }
+        }
+        .sheet(isPresented: $showQRScanner) {
+            QRScannerView { scannedCode in
+                showQRScanner = false
+                SkiService.shared.fetchSkiByQRCode(qrCode: scannedCode) { response in
+                    DispatchQueue.main.async {
+                        if let response = response {
+                            focussedSki = response
+                            showFocussedSki = true
+                        } else {
+                            qrAlertMessage = "QR code not recognised. Try again."
+                            showQRAlert = true
                         }
-                    )
+                    }
                 }
             }
         }

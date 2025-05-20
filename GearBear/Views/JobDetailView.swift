@@ -16,10 +16,13 @@ struct JobDetailView: View {
     @State private var showEditTasksSheet = false
     @State private var selectedStatus: String = ""
 
+    var qrAction: () -> Void = {}
+
     var body: some View {
-        PageWithNavBar(rightAction: {
-            showScheduleJob = true
-        }) {
+        PageWithNavBar(
+            rightAction: { showScheduleJob = true },
+            qrAction: qrAction 
+        ) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })
 

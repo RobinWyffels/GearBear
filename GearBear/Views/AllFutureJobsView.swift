@@ -15,6 +15,8 @@ struct AllFutureJobsView: View {
     @StateObject private var todaysJobsViewModel = TodaysJobsViewModel()
     @StateObject private var allFutureJobsViewModel = AllFutureJobsViewModel()
     @State private var selectedJobId: Int? = nil
+
+    var qrAction: () -> Void = {}
     
     // Use the view model's jobs for grouping
     var jobsByDate: [String: [Job]] {
@@ -26,9 +28,10 @@ struct AllFutureJobsView: View {
     }
 
     var body: some View {
-        PageWithNavBar(rightAction: {
-            showScheduleJob = true
-        }) {
+        PageWithNavBar(
+            rightAction: { showScheduleJob = true },
+            qrAction: qrAction 
+        ) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })
                 ScrollView {

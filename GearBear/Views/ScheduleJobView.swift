@@ -20,8 +20,12 @@ struct ScheduleJobView: View {
     @State private var showStatusSheet = false
     @State private var selectedStatus: String = "NEEDS PREPPING"
 
+    var qrAction: () -> Void = {}
+
     var body: some View {
-        PageWithNavBar {
+        PageWithNavBar(
+            qrAction: qrAction 
+        ) {
             VStack {
                 TopBannerView(showBackArrow: true, onBack: { dismiss() })
                 ScrollView {
